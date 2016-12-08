@@ -1,24 +1,25 @@
-# LEMP + Jekyll Vagrant Machine
+# LEMP, NodeJS and Jekyll Vagrant machine.
 
 ## Introduction
-A Vagrant VM machine with a LEMP (Nginx, PHP, MySQL) stack, Jekyll and NodeJS. 
-Uses the 32 bits version of the Ubuntu Precise (12.04). Automates the setup of 
-the Nginx, PHP (fpm), MySQL and PHPMyAdmin packages, as well as the 
-github-pages package (which includes Jekyll). Its a custom machine I use in my 
-projects.
+A Vagrant machine with a LEMP (Nginx, PHP, MySQL) stack, Jekyll and NodeJS. Makes
+use of the 64 bit version of Debian Jessie (7). Automates the setup of the 
+Nginx, PHP (fpm), MySQL and PHPMyAdmin packages, as well as the github-pages 
+package (which includes Jekyll).
+
+Its a custom machine I use in my  projects.
 
 ## Requirements
 * [VirtualBox](https://www.virtualbox.org)
 * [Vagrant](http://vagrantup.com)
-* [Cygwin](https://www.cygwin.com/) or any other ssh-capable terminal shell for 
-the `vagrant ssh` command
+* [Cygwin](https://www.cygwin.com/) or any other ssh-capable terminal shell.
+* [Rsync](https://es.wikipedia.org/wiki/Rsync) if you're using a Windows host.
 
 ## What is inside.
-* Ubuntu 12.04 x32
+* Debian Jessie (x64) (`debian/contrib-jessie64`)
 * MySQL
 * Nginx
 * php5-fpm
-* phpmyadmin
+* PHPMyAdmin
 * Ruby 2.1
 * github-pages
 * Jekyll
@@ -27,7 +28,7 @@ the `vagrant ssh` command
 ## Building the machine.
     host $ git clone https://github.com/drvy/dmdev-vagrant.git
     host $ cd dmdev-vagrant
-    host $ vagrant up --provision
+    host $ vagrant up
     
 Once build, enter the machine with:
 
@@ -43,10 +44,27 @@ Nginx site. That is:
     host: dmdev-vagrant/wwww
     guest: /var/www/
 
+### Rsync on Windows
+
+Please notice that some boxes like the one used here, force the sharing method 
+to `rsync`. RSYNC does NOT come by default in Windows environments and you need 
+to install it by yourself before running the box for the first time.
+
+The easiest way to install it is to install the CyGWIN platform. Go to 
+[Cygwin.com](https://www.cygwin.com/), download and run the installer. When it 
+prompts you for packages to install, be sure to select `rsync` and `openssh`.
+
+Also, notice that the GIT installer for Windows although it does include some UNIX 
+tools, does NOT provide rsync therefore you should use the CyGWIN Terminal to 
+provision and run your Vagrant box.
+
 ## Database
 The default MySQL user is `root`. The default password for `root` is `toor`.
 
-Same goes for PHPMyAdmin. Default user: `root`. Default password: `toor`
+Same goes for PHPMyAdmin. Default user: `root`. Default password: `toor`.
+
+You can change that by changing the arguments for the provisioning inside the
+`Vagrantfile`.
 
 __* Notice:__ As this is pretended to be a development machine, MySQL 
 installation is NOT secured.
@@ -59,9 +77,9 @@ to change this behavior just change the forwarded port to 8080 or something
 else inside the `Vagrantfile` file.
 
 For __Jekyll__, the forwarded port is outside of the 'dangerous' zone so it 
-defaults to `4000`. So, if you want to access a Jekyll server serving in the 
-guest machine, just access `http://localhost:4000` on your host machine. 
-Please read below on how to properly start a Jekyll server.
+defaults to `4000`. To access a Jekyll server serving in the guest machine,
+access `http://localhost:4000` on your host machine.  Please read below on how
+to properly serve a Jekyll server.
 
 
 ## Serving (and testing) with Jekyll.
@@ -75,6 +93,18 @@ site with auto-rebuild, you should use this command:
 If everything builds well, you should be able to access your Jekyll site on 
 your host machine by accessing `http://localhost:4000`
 
+## Nginx
+The default nginx virtualhost (site) replaced with a custom one in order to
+be able to serve PHP files. No big changes. You can check the `bootstrap.sh` file
+to see what the build looks like.
+
+The default site serves files from `/var/www/html`.
+The default site logs are in `/var/log/nginx/`.
+
+### `sendfile off;`
+Due to a known bug with Virtualbox, the `sendfile` directive is disabled by default
+after installation. You can change this behavior inside the `Vagrantfile`. However
+you may experience some annoying behavior like files not updating after a change.
 
 ## URLs.
 This are the default URLs on your host machine:
