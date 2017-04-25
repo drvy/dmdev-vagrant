@@ -1,24 +1,33 @@
 #!/usr/bin/env bash
 export DEBIAN_FRONTEND=noninteractive
 
-
 # ------------------------------------------
-# DEBCONF Config for MySQL
+# DEBCONF Config for MySQL and Sources List
 # ------------------------------------------
 
 # Set root's password for mysql to 'toor'
-echo "mysql-server mysql-server/root_password password $1" | debconf-set-selections
-echo "mysql-server mysql-server/root_password_again password $1" | debconf-set-selections
+echo "mariadb-server-5.5 mysql-server/root_password password $1" | sudo debconf-set-selections
+echo "mariadb-server-5.5 mysql-server/root_password_again password $1" | sudo debconf-set-selections
+
+# Add dotdeb repository to sources.list
+echo "deb http://packages.dotdeb.org jessie all" | sudo tee -a /etc/apt/sources.list.d/dotdeb.list
+echo "deb-src http://packages.dotdeb.org jessie all" | sudo tee -a /etc/apt/sources.list.d/dotdeb.list
+
+# Dotdeb Key
+wget -qO - http://www.dotdeb.org/dotdeb.gpg | sudo apt-key add -
+sudo apt-key add /tmp/dotdeb.gpg
+sudo rm -f /tmp/dotdeb.gpg
 
 # ------------------------------------------
 # Install Packages.
 # ------------------------------------------
-
 sudo apt-get -y update
 
-# Mysql, Nginx, PHP (and extensions)
-sudo apt-get -y install mysql-server mysql-client nginx php5-fpm
-sudo apt-get -y install php5-mysql php5-curl php5-gd php5-intl php5-mcrypt php5-sqlite php5-xmlrpc
+# PHP
+sudo apt-get -y install php7.0-cli php7.0-curl php7.0-dev php7.0-zip php7.0-fpm php7.0-gd php7.0-xml php7.0-mysql php7.0-mcrypt php7.0-mbstring php7.0-opcache
+
+# Nginx and MariaDB
+sudo apt-get -y install mariadb-server mariadb-client nginx
 
 # Latest Ruby
 sudo apt-get -y install zlib1g-dev build-essential ruby ruby2.1-dev
@@ -42,7 +51,6 @@ sudo openssl req -nodes -new -x509 -subj "/C=ES/ST=NA/L=NA/O=dMDev/OU=DevOps/CN=
 # ------------------------------------------
 # Configure the default Nginx site
 # ------------------------------------------
-
 sudo rm /etc/nginx/sites-available/default
 sudo touch /etc/nginx/sites-available/default
 
@@ -68,7 +76,6 @@ EOF
 # ------------------------------------------
 # This should be included in all sites
 # ------------------------------------------
-
 sudo mkdir -p /etc/nginx/include.d
 sudo touch /etc/nginx/include.d/all-common
 
@@ -85,16 +92,16 @@ location = /favicon.ico { log_not_found off; access_log off; }
 location ~ \.php$ {
     try_files $uri = 404;
     fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    fastcgi_pass unix:/var/run/php5-fpm.sock;
+    fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     fastcgi_index index.php;
-    include fastcgi.conf;
+    include fastcgi_params;
 }
 EOF
 
 # ------------------------------------------
 # Create WWW dir and give permissions
 # ------------------------------------------
-
 sudo mkdir -p /var/www
 sudo mkdir -p /var/www/html
 
@@ -107,7 +114,6 @@ sudo chmod g+s -R /var/www
 # ------------------------------------------
 # Create an example PHP file.
 # ------------------------------------------
-
 touch /var/www/html/index.php
 cat > /var/www/html/index.php <<'EOF'
 <!DOCTYPE html>
@@ -159,9 +165,8 @@ EOF
 # ------------------------------------------
 # Configure PHP-FPM to use local socket.
 # ------------------------------------------
-
-sudo cp /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf.bak
-sudo sed -ie 's/listen = 127.0.0.1:9000/listen = \/var\/run\/php5-fpm.sock/g' /etc/php5/fpm/pool.d/www.conf
+sudo cp /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf.bak
+sudo sed -ie 's/listen = 127.0.0.1:9000/listen = \/run\/php7.0-fpm.sock/g' /etc/php5/fpm/pool.d/www.conf
 sudo sed -ie 's/;listen.owner = www-data/listen.owner = www-data/g' /etc/php5/fpm/pool.d/www.conf
 sudo sed -ie 's/;listen.group = www-data/listen.group = www-data/g' /etc/php5/fpm/pool.d/www.conf
 sudo sed -ie 's/;listen.mode = 0660/listen.mode = 0660/g' /etc/php5/fpm/pool.d/www.conf
@@ -171,7 +176,6 @@ sudo sed -ie 's/;listen.mode = 0660/listen.mode = 0660/g' /etc/php5/fpm/pool.d/w
 # Virtualbox & Vagrant bug related to sendFile.
 # https://github.com/mitchellh/vagrant/issues/351#issuecomment-1339640
 # ------------------------------------------
-
 if [ "$2" = "yes" ] ; then
     sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
     sudo sed -ie 's/sendfile on;/sendfile off;/g' /etc/nginx/nginx.conf
@@ -181,6 +185,6 @@ fi
 # ------------------------------------------
 # Restart services
 # ------------------------------------------
-
-sudo service php5-fpm restart
+sudo service php7.0-fpm restart
 sudo service nginx restart
+sudo service mysql restart
