@@ -13,8 +13,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     config.vm.network "private_network", ip: '192.168.10.10'
     config.vm.network 'forwarded_port', guest: 80,    host: 80 # Nginx
-    config.vm.network 'forwarded_port', guest: 4000,  host: 4000 # Jekyll
+    config.vm.network 'forwarded_port', guest: 443,   host: 443 # Nginx SSL
     config.vm.network 'forwarded_port', guest: 3306,  host: 3306 # MySQL
+    config.vm.network 'forwarded_port', guest: 4000,  host: 4000 # Jekyll
 
     config.vm.synced_folder './www', '/var/www', :mount_options => ['dmode=777', 'fmode=666']
     
