@@ -31,6 +31,14 @@ sudo gem install jekyll-paginate
 # NodeJS
 sudo apt-get -y install nodejs
 
+
+# ------------------------------------------
+# Generate SSL Certificates
+# ------------------------------------------
+sudo mkdir -p /etc/nginx/conf.d/certs
+sudo openssl req -nodes -new -x509 -subj "/C=ES/ST=NA/L=NA/O=dMDev/OU=DevOps/CN=192.168.10.10/emailAddress=dev@localhost.com" -keyout /etc/nginx/conf.d/certs/dmdev.key -out /etc/nginx/conf.d/certs/dmdev.cert
+
+
 # ------------------------------------------
 # Configure the default Nginx site
 # ------------------------------------------
@@ -41,12 +49,16 @@ sudo touch /etc/nginx/sites-available/default
 sudo cat > /etc/nginx/sites-available/default <<'EOF'
 server {
     listen 80 default_server;
+    listen 443 ssl;
 
     root /var/www/html;
     server_name _;
 
     access_log /var/log/nginx/default.access.log;
     error_log /var/log/nginx/default.error.log;
+
+    ssl_certificate      /etc/nginx/conf.d/certs/dmdev.cert;
+    ssl_certificate_key  /etc/nginx/conf.d/certs/dmdev.key;
 
     include /etc/nginx/include.d/all-common;
 }

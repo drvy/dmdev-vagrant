@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Second argument (yes) addresses VirtualBox SendFile fix (check bootstrap.sh)
     config.vm.provision :shell, path: 'bootstrap.sh', args: "toor yes"
     
-    config.vm.network "private_network", ip: '192.168.10.10'
+    config.vm.network 'private_network', ip: '192.168.10.10'
     config.vm.network 'forwarded_port', guest: 80,    host: 80 # Nginx
     config.vm.network 'forwarded_port', guest: 443,   host: 443 # Nginx SSL
     config.vm.network 'forwarded_port', guest: 3306,  host: 3306 # MySQL
