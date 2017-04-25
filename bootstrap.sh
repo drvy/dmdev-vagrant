@@ -37,8 +37,9 @@ sudo gem update --system
 sudo gem install github-pages
 sudo gem install jekyll-paginate
 
-# NodeJS
+# NodeJS and cURL
 sudo apt-get -y install nodejs
+sudo apt-get -y install curl
 
 
 # ------------------------------------------
@@ -180,6 +181,14 @@ if [ "$2" = "yes" ] ; then
     sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak
     sudo sed -ie 's/sendfile on;/sendfile off;/g' /etc/nginx/nginx.conf
 fi
+
+
+# ------------------------------------------
+# Install Composer
+# ------------------------------------------
+cd /usr/src
+curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+cd ~
 
 
 # ------------------------------------------
