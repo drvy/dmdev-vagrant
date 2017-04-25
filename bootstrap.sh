@@ -49,7 +49,6 @@ server {
     error_log /var/log/nginx/default.error.log;
 
     include /etc/nginx/include.d/all-common;
-    include /etc/nginx/include.d/phpmyadmin;
 }
 EOF
 
