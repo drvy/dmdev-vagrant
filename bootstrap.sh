@@ -98,9 +98,49 @@ sudo chmod g+s -R /var/www
 
 touch /var/www/html/index.php
 cat > /var/www/html/index.php <<'EOF'
-<?php if(isset($_GET['phpinfo'])){ die(phpinfo()); } ?>
-<h1>Welcome to your server.</h1>
-<a href='?phpinfo=true'>Check your PHP config.</a>
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <title>dMDev Vagrant Box</title>
+    <style type='text/css'>
+        html, body {
+            margin: 0; padding: 0; font-size: 16px; 
+            color: #111; font-family: Monospace;
+            text-align: center; background: #f5f5f5;
+        }
+        .box { max-width: 600px; margin: 5% auto 0 auto; padding: 5px; }
+        h1 { font-size: 2.1em; letter-spacing: -1px; } h1 em { color: #069; }
+        ul { list-style: square inside; text-align: left; } li { padding: 2px; }
+        a, a:visited { color: #069; padding: 2px; text-decoration: none; border-bottom: 1px dashed #ccc;}
+        a:hover, a:active { color: #111; text-decoration: none; border-bottom: 1px solid #111; }
+        code { background: #fff; padding: 1px; }
+        .hearth { color: #A93232; }
+    </style>
+</head>
+<body>
+    <div class='box'>
+        <h1>Welcome to <em><code>dMDev Vagrant Box</code></em>!</h1>
+        <ul>
+            <li><a href='?phpinfo=true'>Check PHP Config</a></li>
+            <li><a href='https://github.com/drvy/dmdev-vagrant' target='_blank'>Fork the project on GitHub</a></li>
+            <li>
+                <a href='https://www.navicat.com/' target='_blank'>Navicat</a> / 
+                <a href='https://www.heidisql.com/' target='_blank'>HeidiSQL</a> / 
+                <a href='https://www.mysql.com/products/workbench/' target='_blank'>MySQL Workbench</a>
+            </li>
+        </ul>
+
+        <p>You can now start running and developing your projects.</p>
+        <p>Read the included <code>README.md</code> for documentation.</p>
+        <small>
+            Version 3.0 | 
+            Made with by <span class='hearth'>&#10084;</span>
+            <a href='https://github.com/drvy' target='_blank'>Dragomir Yordanov</a>
+        </small>
+    </div>
+</body>
+</html>
 EOF
 
 
