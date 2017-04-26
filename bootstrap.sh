@@ -15,8 +15,6 @@ echo "deb-src http://packages.dotdeb.org jessie all" | sudo tee -a /etc/apt/sour
 
 # Dotdeb Key
 wget -qO - http://www.dotdeb.org/dotdeb.gpg | sudo apt-key add -
-sudo apt-key add /tmp/dotdeb.gpg
-sudo rm -f /tmp/dotdeb.gpg
 
 # ------------------------------------------
 # Install Packages.
@@ -104,7 +102,6 @@ EOF
 # Create WWW dir and give permissions
 # ------------------------------------------
 sudo mkdir -p /var/www
-sudo mkdir -p /var/www/html
 
 sudo adduser vagrant www-data
 sudo chown vagrant:www-data -R /var/www
@@ -115,8 +112,8 @@ sudo chmod g+s -R /var/www
 # ------------------------------------------
 # Create an example PHP file.
 # ------------------------------------------
-touch /var/www/html/index.php
-cat > /var/www/html/index.php <<'EOF'
+touch /var/www/index.php
+cat > /var/www/index.php <<'EOF'
 <!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -167,10 +164,10 @@ EOF
 # Configure PHP-FPM to use local socket.
 # ------------------------------------------
 sudo cp /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.conf.bak
-sudo sed -ie 's/listen = 127.0.0.1:9000/listen = \/run\/php7.0-fpm.sock/g' /etc/php5/fpm/pool.d/www.conf
-sudo sed -ie 's/;listen.owner = www-data/listen.owner = www-data/g' /etc/php5/fpm/pool.d/www.conf
-sudo sed -ie 's/;listen.group = www-data/listen.group = www-data/g' /etc/php5/fpm/pool.d/www.conf
-sudo sed -ie 's/;listen.mode = 0660/listen.mode = 0660/g' /etc/php5/fpm/pool.d/www.conf
+sudo sed -ie 's/listen = 127.0.0.1:9000/listen = \/run\/php7.0-fpm.sock/g' /etc/php/7.0/fpm/pool.d/www.conf
+sudo sed -ie 's/;listen.owner = www-data/listen.owner = www-data/g' /etc/php/7.0/fpm/pool.d/www.conf
+sudo sed -ie 's/;listen.group = www-data/listen.group = www-data/g' /etc/php/7.0/fpm/pool.d/www.conf
+sudo sed -ie 's/;listen.mode = 0660/listen.mode = 0660/g' /etc/php/7.0/fpm/pool.d/www.conf
 
 
 # ------------------------------------------
