@@ -56,6 +56,7 @@ Also, notice that the GIT installer for Windows although it does include some UN
 ## Database
 The default MariaDB user is `root`. The default password for `root` is `toor`.
 You can change that by changing the arguments for the provisioning inside the `Vagrantfile`.
+
 __* Notice:__ As this is pretended to be a development machine, MariaDB installation is NOT secured.
 
 ### Access
