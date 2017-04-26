@@ -58,7 +58,7 @@ server {
     listen 80 default_server;
     listen 443 ssl;
 
-    root /var/www/html;
+    root /var/www;
     server_name _;
 
     access_log /var/log/nginx/default.access.log;
@@ -114,6 +114,13 @@ sudo chmod g+s -R /var/www
 # ------------------------------------------
 touch /var/www/index.php
 cat > /var/www/index.php <<'EOF'
+<?php
+    if(isset($_GET['phpinfo'])){
+        echo phpinfo();
+        die();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang='en'>
 <head>
