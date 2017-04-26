@@ -1,12 +1,9 @@
-# LEMP, NodeJS and Jekyll Vagrant machine.
+![LEMP, NodeJS and Jekyll Vagrant machine.](http://i.imgur.com/M9dFkse.png "LEMP, NodeJS and Jekyll Vagrant machine.")
 
 ## Introduction
-A Vagrant machine with a LEMP (Nginx, PHP, MySQL) stack, Jekyll and NodeJS. Makes
-use of the 64 bit version of Debian Jessie (7). Automates the setup of the 
-Nginx, PHP (fpm), MySQL and PHPMyAdmin packages, as well as the github-pages 
-package (which includes Jekyll).
+Basic Vagrant Setup with a bootstrap script for a LEMP (Ningx PHP7, MariaDB) stack, Jekyll, NodeJS, Ruby and Composer. Makes use of the 64 bit version of Debian Jessie box provided by Vagrant itself. Automates the setup and initial configuration of the packages.
 
-Its a custom machine I use in my  projects.
+Its a custom machine I use in my projects.
 
 ## Requirements
 * [VirtualBox](https://www.virtualbox.org)
@@ -16,105 +13,90 @@ Its a custom machine I use in my  projects.
 
 ## What is inside.
 * Debian Jessie (x64) (`debian/contrib-jessie64`)
-* MySQL
-* Nginx
-* php5-fpm
-* PHPMyAdmin
-* Ruby 2.1
-* github-pages
-* Jekyll
-* NodeJS
+* MariaDB (`mariadb-server mariadb-client`)
+* Nginx (`nginx`)
+* PHP 7 (`php7.0-fpm`)
+* Ruby 2.1 (`ruby2.1-dev`)
+* NodeJS (`nodejs`)
+* github-pages (`github-pages bundler jekyll-paginate`)
+* Jekyll (_provided with github-pages_)
+* Composer (_lastest version on provision_).
+
+__PHP Extensions__
+`php7.0-cli php7.0-curl php7.0-dev php7.0-zip php7.0-gd php7.0-xml php7.0-mysql php7.0-mcrypt php7.0-mbstring php7.0-opcache`
+
+__Other Packages__
+`curl zlib1g-dev build-essential`
 
 ## Building the machine.
     host $ git clone https://github.com/drvy/dmdev-vagrant.git
     host $ cd dmdev-vagrant
     host $ vagrant up
     
-Once build, enter the machine with:
+Once build, log into the machine with:
 
     host $ vagrant ssh
     
-You can check if everything went well by opening `http://localhost` on your 
-host machine.
+You can check if everything went well by opening `http://192.168.30.10` on your host machine.
 
 ## Shared (sync) folder
-There is a shared folder that points directly to the root directory of the 
-Nginx site. That is:
+There is a shared folder that points directly to the root directory of the  Nginx site. That is:
 
     host: dmdev-vagrant/wwww
     guest: /var/www/
 
 ### Rsync on Windows
 
-Please notice that some boxes like the one used here, force the sharing method 
-to `rsync`. RSYNC does NOT come by default in Windows environments and you need 
-to install it by yourself before running the box for the first time.
+Please notice that some boxes like the one used here, force the sharing method to `rsync`. RSYNC does NOT come by default in Windows environments and you need to install it by yourself before running the box for the first time.
 
-The easiest way to install it is to install the CyGWIN platform. Go to 
-[Cygwin.com](https://www.cygwin.com/), download and run the installer. When it 
-prompts you for packages to install, be sure to select `rsync` and `openssh`.
+The easiest way to install it is to install the CyGWIN platform. Go to [Cygwin.com](https://www.cygwin.com/), download and run the installer. When it prompts you for packages to install, be sure to select `rsync` and `openssh`.
 
-Also, notice that the GIT installer for Windows although it does include some UNIX 
-tools, does NOT provide rsync therefore you should use the CyGWIN Terminal to 
-provision and run your Vagrant box.
+Also, notice that the GIT installer for Windows although it does include some UNIX tools, does NOT provide rsync therefore you should use the CyGWIN Terminal to provision and run your Vagrant box.
 
 ## Database
-The default MySQL user is `root`. The default password for `root` is `toor`.
+The default MariaDB user is `root`. The default password for `root` is `toor`.
+You can change that by changing the arguments for the provisioning inside the `Vagrantfile`.
+__* Notice:__ As this is pretended to be a development machine, MariaDB installation is NOT secured.
 
-Same goes for PHPMyAdmin. Default user: `root`. Default password: `toor`.
+### Access
+You can access the database as normal. PHPMyAdmin is NOT available. You can use any external program for such task by providing the default params. Recommendend and tested programs: [Navicat](https://www.navicat.com/), [HeidiSQL](https://www.heidisql.com/) and [MySQL Workbench](https://www.mysql.com/products/workbench/).
 
-You can change that by changing the arguments for the provisioning inside the
-`Vagrantfile`.
+A setup example for _Navicat_ would be:
+![Navicat Config](http://i.imgur.com/HMvTvML.png)
 
-__* Notice:__ As this is pretended to be a development machine, MySQL 
-installation is NOT secured.
+Vagrant is instructed not to generate a random key file, so your __Private Key__ will be inside the Vagrant folder named as `insecure_private_key`.
 
 ## Ports
-The config forwards port `80` of both the guest and the host machine. This 
-allows you to access your website by using only `http://localhost` or 
-`127.0.0.1` instead of `http://localhost:8080` or `127.0.0.1:8080`. If you need 
-to change this behavior just change the forwarded port to 8080 or something 
-else inside the `Vagrantfile` file.
-
-For __Jekyll__, the forwarded port is outside of the 'dangerous' zone so it 
-defaults to `4000`. To access a Jekyll server serving in the guest machine,
-access `http://localhost:4000` on your host machine.  Please read below on how
-to properly serve a Jekyll server.
-
+- The only port fowarded is the default SSH (22), and its done automatically by Vagrant.
+- GitHub-Pages or Jekyll use by default the port 4000.
+- MariaDB uses the default port (3306)
 
 ## Serving (and testing) with Jekyll.
-There are some problems forwarding the connections between the Jekyll server 
-and the guest/host. Also, you need to enable force polling so Jekyll can 
-correctly watch and update the site on the go. If you want to serve a Jekyll 
-site with auto-rebuild, you should use this command:
+There are some problems forwarding the connections between the Jekyll server  and the guest/host. Also, you need to enable force polling so Jekyll can  correctly watch and update the site on the go. If you want to serve a Jekyll site with auto-rebuild, you should use this command:
 
     jekyll serve --force_polling --host=0.0.0.0
 
-If everything builds well, you should be able to access your Jekyll site on 
-your host machine by accessing `http://localhost:4000`
+If everything builds well, you should be able to access your Jekyll site on your host machine by accessing `http://192.168.30.10:4000`
 
 ## Nginx
-The default nginx virtualhost (site) replaced with a custom one in order to
-be able to serve PHP files. No big changes. You can check the `bootstrap.sh` file
-to see what the build looks like.
+The default nginx virtualhost (site) is replaced with a custom one in order to be able to serve PHP files. No big changes. You can check the `bootstrap.sh` file to see what the build looks like.
 
-The default site serves files from `/var/www/html`.
+The default site serves files from `/var/www/`.
 The default site logs are in `/var/log/nginx/`.
 
+### SSL.
+On provision, the machine will generate a self-signed certificate to enable NGINX SSL (HTTPS). Since the key is self-signed, you will be presented with an alert on any modern browser. Just skip or replace the certificate (`/etc/nginx/conf.d/certs/dmdev.(cert/key)`) with your own.
+
 ### `sendfile off;`
-Due to a known bug with Virtualbox, the `sendfile` directive is disabled by default
-after installation. You can change this behavior inside the `Vagrantfile`. However
-you may experience some annoying behavior like files not updating after a change.
+Due to a known bug with Virtualbox, the `sendfile` directive is disabled by default after installation. You can change this behavior inside the `Vagrantfile`. However you may experience some annoying behavior like files not updating after a change on the host machine.
 
 ## URLs.
 This are the default URLs on your host machine:
 
-|   Service    |                                         URL |
-|:------------:|--------------------------------------------:|
-| HTTP (Nginx) | `http://localhost` or `127.0.0.1`           |
-| Jekyll       | `http://localhost:4000` or `127.0.0.1:4000` |
-| PHPMyAdmin   | `http://localhost/phpmyadmin`               |
-
+|   Service    |                                                     URL |
+|:------------:|--------------------------------------------------------:|
+| HTTP (Nginx) | `http://192.168.30.10` or `https://192.168.30.10`       |
+| Jekyll       | `http://192.168.30.10:4000`                             |
 
 ## Virtual Machine Management (Vagrant)
 This are the basic commands to manage the vagrant machine. If you want to know 
@@ -134,7 +116,7 @@ more about them, just check the official Vagrant documentation.
 ## Licence
     The MIT License (MIT)
     
-    Copyright (c) 2016 Dragomir Yordanov
+    Copyright (c) 2017 Dragomir Yordanov
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
