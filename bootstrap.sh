@@ -21,10 +21,8 @@ wget -qO - http://www.dotdeb.org/dotdeb.gpg | sudo apt-key add -
 # ------------------------------------------
 sudo apt-get -y update
 
-# PHP
+# PHP, MariaDB, Nginx
 sudo apt-get -y install php7.0-cli php7.0-curl php7.0-dev php7.0-zip php7.0-fpm php7.0-gd php7.0-xml php7.0-mysql php7.0-mcrypt php7.0-mbstring php7.0-opcache
-
-# Nginx and MariaDB
 sudo apt-get -y install mariadb-server mariadb-client nginx
 
 # Latest Ruby
@@ -32,8 +30,7 @@ sudo apt-get -y install zlib1g-dev build-essential ruby ruby2.1-dev
 
 # Github Pages (includes jekyll)
 sudo gem update --system
-sudo gem install github-pages
-sudo gem install jekyll-paginate
+sudo gem install github-pages bundler jekyll-paginate
 
 # NodeJS and cURL
 sudo apt-get -y install nodejs
