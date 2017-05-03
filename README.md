@@ -100,7 +100,7 @@ This are the default URLs on your host machine:
 | Jekyll       | `http://192.168.30.10:4000`                             |
 
 ## Virtual Machine Management (Vagrant)
-This are the basic commands to manage the vagrant machine. If you want to know 
+These are the basic commands to manage the vagrant machine. If you want to know 
 more about them, just check the official Vagrant documentation.
 
 |    Action    |                                     Command |
@@ -114,7 +114,7 @@ more about them, just check the official Vagrant documentation.
 | Status       | `vagrant status`                            |
 
 
-## Licence
+## License
     The MIT License (MIT)
     
     Copyright (c) 2017 Dragomir Yordanov
