@@ -1,4 +1,4 @@
-![LEMP, NodeJS and Jekyll Vagrant machine.](http://i.imgur.com/M9dFkse.png "LEMP, NodeJS and Jekyll Vagrant machine.")
+#LEMP, NodeJS and Jekyll Vagrant machine.
 
 ## Introduction
 Basic Vagrant Setup with a bootstrap script for a LEMP (Ningx PHP7, MariaDB) stack, Jekyll, NodeJS, Ruby and Composer. Makes use of the 64 bit version of Debian Jessie box provided by Vagrant itself. Automates the setup and initial configuration of the packages.
@@ -32,11 +32,11 @@ __Other Packages__
     host $ git clone https://github.com/drvy/dmdev-vagrant.git
     host $ cd dmdev-vagrant
     host $ vagrant up
-    
+
 Once build, log into the machine with:
 
     host $ vagrant ssh
-    
+
 You can check if everything went well by opening `http://192.168.30.10` on your host machine.
 
 ## Shared (sync) folder
@@ -100,7 +100,7 @@ This are the default URLs on your host machine:
 | Jekyll       | `http://192.168.30.10:4000`                             |
 
 ## Virtual Machine Management (Vagrant)
-These are the basic commands to manage the vagrant machine. If you want to know 
+These are the basic commands to manage the vagrant machine. If you want to know
 more about them, just check the official Vagrant documentation.
 
 |    Action    |                                     Command |
@@ -116,19 +116,19 @@ more about them, just check the official Vagrant documentation.
 
 ## License
     The MIT License (MIT)
-    
+
     Copyright (c) 2017 Dragomir Yordanov
-    
+
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
     copies of the Software, and to permit persons to whom the Software is
     furnished to do so, subject to the following conditions:
-    
+
     The above copyright notice and this permission notice shall be included in all
     copies or substantial portions of the Software.
-    
+
     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
