@@ -66,7 +66,7 @@ __* Notice:__ As this is pretended to be a development machine, MariaDB installa
 You can access the database as normal. PHPMyAdmin is NOT available. You can use any external program for such task by providing the default params. Recommendend and tested programs: [Navicat](https://www.navicat.com/), [HeidiSQL](https://www.heidisql.com/) and [MySQL Workbench](https://www.mysql.com/products/workbench/).
 
 A setup example for _Navicat_ would be:
-![Navicat Config](http://i.imgur.com/HMvTvML.png)
+![Navicat Config](https://i.imgur.com/QuVmJoQ.gif)
 
 Vagrant is instructed not to generate a random key file, so your __Private Key__ will be inside the Vagrant folder named as `insecure_private_key`.
 
