@@ -1,5 +1,8 @@
 #LEMP, NodeJS and Jekyll Vagrant machine.
 
+__Notice__: This vagrant box and it's bootstrap script are obsolete. Check the new one based on Ubuntu here:
+https://github.com/drvy/dmdev-vagrant
+
 ## Introduction
 Basic Vagrant Setup with a bootstrap script for a LEMP (Ningx PHP7, MariaDB) stack, Jekyll, NodeJS, Ruby and Composer. Makes use of the 64 bit version of Debian Jessie box provided by Vagrant itself. Automates the setup and initial configuration of the packages.
 
