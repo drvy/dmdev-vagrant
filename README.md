@@ -1,4 +1,4 @@
-#LEMP, NodeJS and Jekyll Vagrant machine.
+# LEMP, NodeJS and Jekyll Vagrant machine.
 
 __Notice__: This vagrant box and it's bootstrap script are obsolete. Check the new one based on Ubuntu here:
 https://github.com/drvy/dmdev-vagrant
